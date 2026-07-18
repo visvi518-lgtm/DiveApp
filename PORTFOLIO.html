@@ -372,7 +372,9 @@
   <p class="sub">프리다이버와 스쿠버다이버를 위한<br/>다이빙 기록·훈련·커뮤니티 플랫폼</p>
   <p class="lede">
     기획 문서 작성부터 DB 스키마 설계, Backend(FastAPI)·Android(Kotlin/Compose)·Web(React) 3개 플랫폼 구현,
-    그리고 실제 기기·브라우저·백엔드를 연동한 End-to-End 검증까지 전 과정을 진행한 개인 프로젝트다.
+    그리고 실제 기기·브라우저·백엔드를 연동한 End-to-End 검증까지 전 과정을 진행한 개인 프로젝트. AI 페어
+    프로그래밍 도구(Claude Code)를 활용해 스캐폴딩 속도를 확보하고, 그 시간을 실제 환경에서의 검증과
+    디버깅에 집중적으로 투자.
   </p>
 
   <div class="stat-strip">
@@ -392,21 +394,20 @@
 <section id="overview">
   <div class="wrap">
     <div class="kicker">Overview</div>
-    <h2>기획 문서부터 시작해서, 검증 가능한 것에 집중했다</h2>
+    <h2>기획 문서부터 시작해서, 검증 가능한 것에 집중</h2>
     <p class="lead">
-      프리다이버, 스쿠버다이버, 다이빙 강사·교육기관을 대상으로 실제 서비스 출시를 목표로 기획했다.
+      프리다이버, 스쿠버다이버, 다이빙 강사·교육기관을 대상으로 실제 서비스 출시를 전제로 기획.
       요구사항 정의 → 유저플로우 → DB 스키마 → API 설계 → 화면 설계 순서로 문서를 먼저 작성한 뒤 구현에
-      들어가는 Documentation-First 방식으로 진행했다. Claude Code 기반 AI 페어 프로그래밍 워크플로우로
-      스캐폴딩 속도를 확보하고, 그렇게 확보한 시간을 실제 환경에서의 검증과 디버깅에 집중적으로 투자했다.
+      들어가는 Documentation-First 워크플로우 진행.
     </p>
 
     <div class="callout">
       <div class="callout-label">Pivot decision</div>
       <p>
-        원래 계획은 iOS(SwiftUI) 우선 개발이었다. iOS 파운데이션까지 구현한 시점에 개발 환경에 Mac/Xcode가
-        없어 실제 컴파일 검증이 불가능하다는 제약이 드러났다. "검증 가능한 것부터 완성도를 높인다"는 원칙에
-        따라 iOS는 보류하고 Android·Web을 우선 진행하는 방향으로 전환했다 — 이 판단 덕분에 이후 모든 기능을
-        실제 에뮬레이터·브라우저·로컬 백엔드로 끝까지 검증할 수 있었다.
+        원래 계획은 iOS(SwiftUI) 우선 개발. iOS 파운데이션 구현까지 마친 시점에 개발 환경에 Mac/Xcode가
+        없어 실제 컴파일 검증이 불가능하다는 제약이 드러났고, "검증 가능한 것부터 완성도를 높인다"는 원칙에
+        따라 iOS는 보류하고 Android(Kotlin/Compose)와 Web(React)을 우선 진행하는 방향으로 전환. 이 판단
+        덕분에 이후 모든 기능을 실제 에뮬레이터·브라우저·로컬 백엔드로 끝까지 검증.
       </p>
     </div>
 
@@ -463,10 +464,10 @@
 <section id="debugging">
   <div class="wrap">
     <div class="kicker">Problem solving</div>
-    <h2>구현보다 오래 걸린 건, "진짜로 동작하는지" 확인하는 과정이었다</h2>
+    <h2>구현보다 오래 걸린 건, "진짜로 동작하는지" 확인하는 과정</h2>
     <p class="lead">
       아래 7건은 전부 오프라인·목(mock) 기반 테스트로는 원천적으로 발견할 수 없고, 실제 DB·실제 기기·실제
-      계정으로 전체 플로우를 끝까지 돌려봐야만 드러난 문제였다.
+      계정으로 전체 플로우를 끝까지 돌려봐야만 드러난 문제.
     </p>
 
     <div class="log-session">
@@ -474,7 +475,7 @@
         <span class="tag">SESSION A</span>
         <h3>로컬 PostgreSQL + 실제 백엔드 연동</h3>
       </div>
-      <p class="log-session-sub">오프라인 SQL 생성과 목 기반 스모크 테스트만 하던 단계에서, 처음으로 진짜 DB에 마이그레이션을 실행하고 실제 기기를 백엔드에 붙였다.</p>
+      <p class="log-session-sub">오프라인 SQL 생성과 목 기반 스모크 테스트만 하던 단계에서, 처음으로 진짜 DB에 마이그레이션을 실행하고 실제 기기를 백엔드에 연결.</p>
 
       <div class="log-entry">
         <h4>Alembic 마이그레이션의 Enum 타입 중복 생성</h4>
@@ -503,7 +504,7 @@
         <span class="tag">SESSION B</span>
         <h3>실제 Naver·Google 계정으로 로그인 완주</h3>
       </div>
-      <p class="log-session-sub">실제 OAuth 앱을 등록하고, 처음으로 진짜 계정으로 소셜 로그인을 끝까지 시도했다.</p>
+      <p class="log-session-sub">실제 OAuth 앱을 등록하고, 처음으로 진짜 계정으로 소셜 로그인을 끝까지 시도.</p>
 
       <div class="log-entry">
         <h4>Naver 로그인 콜백 페이지의 <code>.init()</code> 누락</h4>
@@ -538,7 +539,7 @@
         <span class="tag">SESSION C</span>
         <h3>이메일/비밀번호 인증 추가</h3>
       </div>
-      <p class="log-session-sub">회원가입 → 프로필 설정 → 홈 → 로그아웃 → 재로그인까지, 처음으로 전체 사이클을 실제 브라우저에서 클릭해보다가 발견 — 둘 다 원래 소셜 로그인에도 있던 기존 버그였다.</p>
+      <p class="log-session-sub">회원가입 → 프로필 설정 → 홈 → 로그아웃 → 재로그인까지, 처음으로 전체 사이클을 실제 브라우저에서 클릭해보다가 발견 — 둘 다 원래 소셜 로그인에도 있던 기존 버그.</p>
 
       <div class="log-entry">
         <h4>프로필 설정 화면에 라우트 가드 없음</h4>
@@ -577,7 +578,7 @@
     <p class="lead">
       회원 관리, 정보글/배너 CRUD, 서비스 통계를 제공하는 관리자 화면을 별도 앱 없이 기존 Web 서비스 안에
       역할 기반으로 통합했고, 실제 계정을 관리자 권한으로 전환해 통계 조회부터 CRUD, 배너 노출 순서 중복
-      검증 로직까지 실제 백엔드로 확인했다.
+      검증 로직까지 실제 백엔드로 확인.
     </p>
     <div class="frame">
       <div class="frame-bar"><span></span><span></span><span></span></div>
@@ -592,15 +593,14 @@
     <div class="kicker">Retrospective</div>
     <h2>회고</h2>
     <p class="retro-quote">
-      일곱 건의 버그 모두 공통점이 있었다 —<br/>
+      일곱 건의 버그 모두 공통점 —<br/>
       <span>오프라인·목 기반 테스트로는 원천적으로 발견할 수 없고,</span><br/>
       실제 환경에서 끝까지 돌려봐야만 드러나는 문제였다는 점.
     </p>
     <p class="lead" style="margin-top:22px;">
-      "구현했다"는 것과 "실제로 동작한다"는 것 사이의 간극을 좁히는 데 개발 과정의 상당 부분을 썼다. 로컬
-      개발 환경에서도 가능한 한 진짜 DB, 진짜 OAuth 앱, 진짜 기기를 갖추고 검증하는 습관의 가치를 이 프로젝트를
-      통해 다시 확인했다. 현재 iOS는 Mac 환경 확보 전까지 보류 중이며, Android의 Naver/Google 로그인은
-      Backend/Web과 동일한 코드가 이미 준비되어 있지만 실기기 검증은 아직 남아있다.
+      "구현했다"는 것과 "실제로 동작한다"는 것 사이의 간극을 좁히는 데 개발 과정의 상당 부분을 썼고, 이
+      프로젝트를 통해 로컬 개발 환경에서도 가능한 한 실제 인프라(진짜 DB, 진짜 OAuth 앱, 진짜 기기)를 갖추고
+      검증하는 습관의 가치를 다시 확인.
     </p>
   </div>
 </section>

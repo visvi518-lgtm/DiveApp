@@ -25,6 +25,9 @@ Android/**/*.iml
 Android/captures/
 Android/.cxx/
 
+# User's personal iPad Swift Playground sync files — not part of this project
+DiveAppSwiftPlayground/
+
 # OS
 .DS_Store
 Thumbs.db
