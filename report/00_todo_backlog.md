@@ -7,6 +7,16 @@
 
 ---
 
+## -1. 배포 (Report 11) — Backend + PostgreSQL + Web, Render, 완료
+
+`https://diveapp-backend.onrender.com`, `https://diveapp-web.onrender.com`. GitHub `github.com/visvi518-lgtm/DiveApp` (Public)에서 `render.yaml` Blueprint로 배포. 실제 Naver/Google 로그인, 이메일 회원가입 프로덕션에서 확인 완료. 상세는 `Report/11_report_deployment.md`.
+
+- [ ] Android는 아직 배포 대상 아님 (Play Store 배포는 keystore 서명 등 별도 준비 필요)
+- [ ] 반응형/모바일 브라우저 레이아웃 점검 안 됨
+- [ ] Render 무료/저가 플랜은 트래픽 없을 시 슬립 — 실사용 트래픽 늘면 플랜 재검토 필요
+
+---
+
 ## 0. 보류 중 — iOS (Phase 3, Mac 환경 필요)
 
 **2026-07-14: 사용자가 iOS 개발을 명시적으로 재개 요청하기 전까지 중단하기로 결정.** Android(완료)와 Web(완료)을 우선 진행한다. 아래 항목은 iOS 재개 시 처리한다.

@@ -42,22 +42,25 @@
 
 ## 2. 배포 체크리스트
 
-### Backend
+### Backend — 완료 (2026-07-18, `Report/11_report_deployment.md`)
 
-- [ ] Render(또는 다른 호스팅)에 실제 PostgreSQL 인스턴스 생성
-- [ ] `alembic upgrade head`를 프로덕션 DB에 대해 실행 (지금까지는 로컬 DB에서만 실행함)
-- [ ] `JWT_SECRET_KEY`를 로컬 개발용과 다른 값으로 새로 생성
-- [ ] `ENVIRONMENT=production` 설정
-- [ ] `CORS_ALLOW_ORIGINS`에 실제 Web 배포 도메인 추가
-- [ ] Google/Naver 콘솔에 프로덕션 도메인(콜백 URL / JS origin) 추가 등록
+- [x] Render에 실제 PostgreSQL 인스턴스 생성 (`basic-256mb` 유료 플랜 — 계정에 이미 무료 DB가 하나 있어서 유료로 진행)
+- [x] `alembic upgrade head`를 프로덕션 DB에 대해 실행 — `startCommand`에 포함되어 배포/재시작마다 자동 실행
+- [x] `JWT_SECRET_KEY` — Render Blueprint의 `generateValue: true`로 로컬과 다른 값 자동 생성됨
+- [x] `ENVIRONMENT=production` 설정
+- [x] `CORS_ALLOW_ORIGINS`에 실제 Web 배포 도메인(`https://diveapp-web.onrender.com`) 등록, 실제 preflight 요청으로 확인
+- [x] Google Cloud Console에 프로덕션 JS 원본 등록
+- [x] Naver Developers에 프로덕션 **서비스 URL과 콜백 URL 둘 다** 등록 (콜백 URL만으로는 부족했음 — "서비스 설정에 오류가 있어" 에러 발생했었음)
+- 배포 주소: `https://diveapp-backend.onrender.com`
 
-### Web
+### Web — 완료 (2026-07-18)
 
-- [ ] 정적 호스팅 서비스 결정 (Vercel/Netlify/Render Static Site 등)
-- [ ] `VITE_API_BASE_URL`을 프로덕션 백엔드 주소로 설정
-- [ ] `VITE_GOOGLE_CLIENT_ID`/`VITE_NAVER_CLIENT_ID`는 로컬과 동일한 값 사용 가능 (콘솔에 도메인만 추가하면 됨)
-- [ ] `npm run build` 결과물(`dist/`) 배포
-- [ ] 반응형/모바일 브라우저 레이아웃 점검 (현재 데스크톱 해상도로만 확인됨)
+- [x] 정적 호스팅: Render Static Site로 진행 (Backend와 같은 플랫폼으로 통일)
+- [x] `VITE_API_BASE_URL`을 프로덕션 백엔드 주소로 설정
+- [x] `VITE_GOOGLE_CLIENT_ID`/`VITE_NAVER_CLIENT_ID` 로컬과 동일한 값으로 설정
+- [x] 실제 이메일 회원가입 + 실제 Naver/Google 로그인 프로덕션에서 확인 완료
+- [ ] 반응형/모바일 브라우저 레이아웃 점검 (현재 데스크톱 해상도로만 확인됨) — 아직 미완료
+- 배포 주소: `https://diveapp-web.onrender.com`
 
 ### Android
 
