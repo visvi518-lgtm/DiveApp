@@ -1,0 +1,19 @@
+.sub-page-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  margin-bottom: var(--space-lg);
+}
+
+.sub-page-header__back {
+  background: none;
+  border: none;
+  color: var(--color-primary);
+  cursor: pointer;
+  font-size: 0.9375rem;
+  padding: 0;
+}
+
+.sub-page-header__title {
+  flex: 1;
+}

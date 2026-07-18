@@ -1,0 +1,618 @@
+<title>DiveApp — Case Study</title>
+<style>
+  @font-face {
+    font-family: 'Fraunces';
+    src: url(data:font/ttf;base64,__FONT_FRAUNCES__) format('truetype-variations');
+    font-weight: 100 900;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: 'Plex Sans';
+    src: url(data:font/ttf;base64,__FONT_PLEXSANS__) format('truetype-variations');
+    font-weight: 100 700;
+    font-stretch: 75% 125%;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: 'Plex Mono';
+    src: url(data:font/ttf;base64,__FONT_PLEXMONO__) format('truetype');
+    font-weight: 400;
+    font-display: swap;
+  }
+
+  :root {
+    --bg: #eef5f6;
+    --bg-raised: #ffffff;
+    --bg-sunken: #e2edee;
+    --text: #0a1620;
+    --text-muted: #4a6673;
+    --accent: #0a6e8c;
+    --accent-strong: #075064;
+    --accent-soft: rgba(10,110,140,0.10);
+    --signal: #d84315;
+    --signal-soft: rgba(216,67,21,0.10);
+    --border: rgba(10,22,32,0.13);
+    --card: #ffffff;
+    --shadow: 0 1px 2px rgba(10,22,32,0.04), 0 8px 24px rgba(10,22,32,0.06);
+    color-scheme: light dark;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #071620;
+      --bg-raised: #0d222b;
+      --bg-sunken: #051119;
+      --text: #e9f4f6;
+      --text-muted: #8db0b9;
+      --accent: #52c4e0;
+      --accent-strong: #86dbf0;
+      --accent-soft: rgba(82,196,224,0.12);
+      --signal: #ff8a65;
+      --signal-soft: rgba(255,138,101,0.14);
+      --border: rgba(233,244,246,0.13);
+      --card: #0d222b;
+      --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 12px 32px rgba(0,0,0,0.35);
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #071620;
+    --bg-raised: #0d222b;
+    --bg-sunken: #051119;
+    --text: #e9f4f6;
+    --text-muted: #8db0b9;
+    --accent: #52c4e0;
+    --accent-strong: #86dbf0;
+    --accent-soft: rgba(82,196,224,0.12);
+    --signal: #ff8a65;
+    --signal-soft: rgba(255,138,101,0.14);
+    --border: rgba(233,244,246,0.13);
+    --card: #0d222b;
+    --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 12px 32px rgba(0,0,0,0.35);
+  }
+  :root[data-theme="light"] {
+    --bg: #eef5f6;
+    --bg-raised: #ffffff;
+    --bg-sunken: #e2edee;
+    --text: #0a1620;
+    --text-muted: #4a6673;
+    --accent: #0a6e8c;
+    --accent-strong: #075064;
+    --accent-soft: rgba(10,110,140,0.10);
+    --signal: #d84315;
+    --signal-soft: rgba(216,67,21,0.10);
+    --border: rgba(10,22,32,0.13);
+    --card: #ffffff;
+    --shadow: 0 1px 2px rgba(10,22,32,0.04), 0 8px 24px rgba(10,22,32,0.06);
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Plex Sans', system-ui, sans-serif;
+    font-size: 16px;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+  ::selection { background: var(--accent-soft); }
+
+  h1, h2, h3, h4 {
+    font-family: 'Fraunces', Georgia, serif;
+    font-weight: 620;
+    text-wrap: balance;
+    letter-spacing: -0.01em;
+    margin: 0;
+  }
+  a { color: var(--accent); }
+  a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+  .wrap { max-width: 920px; margin: 0 auto; padding: 0 28px; }
+
+  /* ---------- Nav ---------- */
+  .nav {
+    position: sticky; top: 0; z-index: 20;
+    background: color-mix(in srgb, var(--bg) 88%, transparent);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-row {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 28px;
+    max-width: 920px; margin: 0 auto;
+  }
+  .brand { display: flex; align-items: center; gap: 8px; font-family: 'Fraunces', serif; font-weight: 650; font-size: 1.05rem; }
+  .brand svg { flex: none; }
+  .nav-links { display: flex; gap: 22px; font-size: 0.86rem; color: var(--text-muted); }
+  .nav-links a { color: inherit; text-decoration: none; }
+  .nav-links a:hover { color: var(--accent); }
+  @media (max-width: 620px) { .nav-links { display: none; } }
+
+  /* ---------- Hero ---------- */
+  .hero { padding: 64px 0 40px; }
+  .eyebrow {
+    font-family: 'Plex Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 18px;
+  }
+  .eyebrow::before {
+    content: ''; width: 22px; height: 1px; background: var(--accent);
+  }
+  .hero h1 { font-size: clamp(2.6rem, 6vw, 4rem); line-height: 0.98; }
+  .hero .sub {
+    font-family: 'Fraunces', serif; font-style: italic; font-weight: 420;
+    font-size: clamp(1.15rem, 2.4vw, 1.4rem);
+    color: var(--text-muted);
+    margin-top: 14px;
+    max-width: 34ch;
+  }
+  .hero p.lede { max-width: 62ch; margin-top: 22px; color: var(--text-muted); font-size: 1.02rem; }
+
+  .stat-strip {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    margin-top: 34px;
+  }
+  .stat-cell { background: var(--bg-raised); padding: 16px 14px; }
+  .stat-num {
+    font-family: 'Plex Mono', monospace;
+    font-variant-numeric: tabular-nums;
+    font-size: 1.55rem;
+    font-weight: 500;
+    color: var(--accent);
+  }
+  .stat-label { font-size: 0.74rem; color: var(--text-muted); margin-top: 2px; }
+  @media (max-width: 620px) { .stat-strip { grid-template-columns: repeat(2, 1fr); } }
+
+  /* ---------- Device frame ---------- */
+  .frame {
+    margin-top: 40px;
+    border-radius: 14px;
+    border: 1px solid var(--border);
+    background: var(--bg-raised);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+  }
+  .frame-bar {
+    display: flex; align-items: center; gap: 6px;
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border);
+  }
+  .frame-bar span { width: 8px; height: 8px; border-radius: 50%; background: var(--border); }
+  .frame-shot { position: relative; width: 100%; overflow: hidden; background: var(--bg-sunken); }
+  .frame-shot img { display: block; width: 100%; height: auto; }
+  .frame-cap { padding: 10px 14px; font-size: 0.8rem; color: var(--text-muted); border-top: 1px solid var(--border); }
+
+  /* ---------- Section shell ---------- */
+  section { padding: 64px 0; border-top: 1px solid var(--border); }
+  section:first-of-type { border-top: none; }
+  .kicker {
+    font-family: 'Plex Mono', monospace;
+    font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--text-muted); margin-bottom: 10px;
+  }
+  section h2 { font-size: clamp(1.7rem, 3.4vw, 2.2rem); max-width: 22ch; }
+  section > .wrap > p.lead { max-width: 68ch; color: var(--text-muted); margin-top: 14px; font-size: 1.02rem; }
+
+  /* ---------- Pivot callout ---------- */
+  .callout {
+    margin-top: 28px;
+    border-left: 3px solid var(--accent);
+    background: var(--accent-soft);
+    border-radius: 0 10px 10px 0;
+    padding: 18px 22px;
+  }
+  .callout .callout-label {
+    font-family: 'Plex Mono', monospace; font-size: 0.72rem; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--accent); margin-bottom: 6px;
+  }
+  .callout p { margin: 0; }
+
+  /* ---------- Feature table ---------- */
+  .feature-grid {
+    margin-top: 32px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .feature-cell { background: var(--bg-raised); padding: 18px 20px; }
+  .feature-cell h4 { font-size: 1rem; font-weight: 600; font-family: 'Plex Sans', sans-serif; }
+  .feature-cell p { margin: 6px 0 0; font-size: 0.88rem; color: var(--text-muted); }
+  @media (max-width: 620px) { .feature-grid { grid-template-columns: 1fr; } }
+
+  /* ---------- Architecture ---------- */
+  .arch-flow {
+    margin-top: 36px;
+    display: flex; align-items: stretch; gap: 0;
+    flex-wrap: wrap;
+  }
+  .arch-box {
+    flex: 1 1 150px;
+    background: var(--bg-raised);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px 16px;
+    text-align: center;
+  }
+  .arch-box .t { font-family: 'Plex Mono', monospace; font-size: 0.85rem; font-weight: 500; }
+  .arch-box .d { font-size: 0.76rem; color: var(--text-muted); margin-top: 4px; }
+  .arch-arrow {
+    flex: 0 0 32px;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--text-muted); font-family: 'Plex Mono', monospace;
+  }
+  @media (max-width: 700px) {
+    .arch-flow { flex-direction: column; }
+    .arch-arrow { transform: rotate(90deg); flex-basis: 20px; }
+  }
+
+  .client-row { display: flex; gap: 16px; margin-top: 16px; flex-wrap: wrap; }
+  .client-row .arch-box { flex: 1 1 200px; }
+
+  table.stack {
+    margin-top: 30px;
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.88rem;
+  }
+  table.stack th, table.stack td {
+    text-align: left; padding: 10px 14px;
+    border-bottom: 1px solid var(--border);
+  }
+  table.stack th {
+    font-family: 'Plex Mono', monospace;
+    font-weight: 500; font-size: 0.72rem;
+    letter-spacing: 0.06em; text-transform: uppercase;
+    color: var(--text-muted);
+  }
+  .stack-wrap { overflow-x: auto; }
+
+  /* ---------- Log entries ---------- */
+  .log-session { margin-top: 44px; }
+  .log-session:first-child { margin-top: 32px; }
+  .log-session-head {
+    display: flex; align-items: baseline; gap: 12px; margin-bottom: 18px;
+    flex-wrap: wrap;
+  }
+  .log-session-head .tag {
+    font-family: 'Plex Mono', monospace; font-size: 0.72rem;
+    color: var(--bg-raised); background: var(--accent);
+    padding: 3px 9px; border-radius: 5px; letter-spacing: 0.04em;
+  }
+  .log-session-head h3 { font-size: 1.15rem; }
+  .log-session-sub { font-size: 0.85rem; color: var(--text-muted); margin: 6px 0 0; }
+
+  .log-entry {
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--signal);
+    border-radius: 0 10px 10px 0;
+    background: var(--bg-raised);
+    padding: 18px 22px;
+    margin-top: 14px;
+  }
+  .log-entry h4 {
+    font-family: 'Plex Sans', sans-serif; font-weight: 600; font-size: 0.98rem;
+  }
+  .log-entry .row { display: flex; gap: 10px; margin-top: 10px; font-size: 0.88rem; }
+  .log-entry .row .k {
+    flex: 0 0 68px; font-family: 'Plex Mono', monospace; font-size: 0.68rem;
+    letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-muted);
+    padding-top: 2px;
+  }
+  .log-entry .row .v { flex: 1; color: var(--text); }
+  .log-entry .row .v code {
+    font-family: 'Plex Mono', monospace; font-size: 0.85em;
+    background: var(--bg-sunken); padding: 1px 5px; border-radius: 4px;
+  }
+
+  .shot-pair {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
+    margin-top: 32px;
+  }
+  @media (max-width: 620px) { .shot-pair { grid-template-columns: 1fr; } }
+
+  /* ---------- Retro ---------- */
+  .retro-quote {
+    margin-top: 24px;
+    font-family: 'Fraunces', serif; font-weight: 500; font-style: italic;
+    font-size: clamp(1.2rem, 2.6vw, 1.5rem);
+    line-height: 1.5;
+    max-width: 42ch;
+    color: var(--text);
+  }
+  .retro-quote span { color: var(--accent); }
+
+  footer { padding: 46px 0 60px; }
+  .foot-row { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
+  .badges { display: flex; gap: 8px; flex-wrap: wrap; }
+  .badge {
+    font-family: 'Plex Mono', monospace; font-size: 0.72rem;
+    border: 1px solid var(--border); border-radius: 999px;
+    padding: 5px 11px; color: var(--text-muted);
+  }
+  .foot-note { font-size: 0.82rem; color: var(--text-muted); }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .reveal { animation: rise 0.5s ease both; }
+    @keyframes rise { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+  }
+</style>
+
+<nav class="nav">
+  <div class="nav-row">
+    <div class="brand">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M2 12c2 2 4 2 6 0s4-2 6 0 4 2 6 0 4-2 6 0" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M2 18c2 2 4 2 6 0s4-2 6 0 4 2 6 0 4-2 6 0" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" opacity="0.5"/></svg>
+      DiveApp
+    </div>
+    <div class="nav-links">
+      <a href="#overview">개요</a>
+      <a href="#architecture">아키텍처</a>
+      <a href="#debugging">문제 해결</a>
+      <a href="#retro">회고</a>
+    </div>
+  </div>
+</nav>
+
+<main class="wrap hero">
+  <div class="eyebrow">Personal full-stack project</div>
+  <h1>DiveApp</h1>
+  <p class="sub">프리다이버와 스쿠버다이버를 위한<br/>다이빙 기록·훈련·커뮤니티 플랫폼</p>
+  <p class="lede">
+    기획 문서 작성부터 DB 스키마 설계, Backend(FastAPI)·Android(Kotlin/Compose)·Web(React) 3개 플랫폼 구현,
+    그리고 실제 기기·브라우저·백엔드를 연동한 End-to-End 검증까지 전 과정을 진행한 개인 프로젝트. AI 페어
+    프로그래밍 도구(Claude Code)를 활용해 스캐폴딩 속도를 확보하고, 그 시간을 실제 환경에서의 검증과
+    디버깅에 집중적으로 투자.
+  </p>
+
+  <div class="stat-strip">
+    <div class="stat-cell"><div class="stat-num">14</div><div class="stat-label">DB 테이블</div></div>
+    <div class="stat-cell"><div class="stat-num">33</div><div class="stat-label">API 엔드포인트</div></div>
+    <div class="stat-cell"><div class="stat-num">03</div><div class="stat-label">플랫폼 (BE·AOS·Web)</div></div>
+    <div class="stat-cell"><div class="stat-num">07</div><div class="stat-label">실사용 환경 버그 수정</div></div>
+  </div>
+
+  <div class="frame">
+    <div class="frame-bar"><span></span><span></span><span></span></div>
+    <div class="frame-shot"><img src="data:image/png;base64,__IMG_HERO__" alt="DiveApp 홈 화면 — 실제 다이빙 기록 통계와 기능 바로가기" loading="lazy"/></div>
+    <div class="frame-cap">Web 홈 화면 — 실제 로그인 계정의 다이빙 통계가 표시된 상태</div>
+  </div>
+</main>
+
+<section id="overview">
+  <div class="wrap">
+    <div class="kicker">Overview</div>
+    <h2>기획 문서부터 시작해서, 검증 가능한 것에 집중</h2>
+    <p class="lead">
+      프리다이버, 스쿠버다이버, 다이빙 강사·교육기관을 대상으로 실제 서비스 출시를 전제로 기획.
+      요구사항 정의 → 유저플로우 → DB 스키마 → API 설계 → 화면 설계 순서로 문서를 먼저 작성한 뒤 구현에
+      들어가는 Documentation-First 워크플로우 진행.
+    </p>
+
+    <div class="callout">
+      <div class="callout-label">Pivot decision</div>
+      <p>
+        원래 계획은 iOS(SwiftUI) 우선 개발. iOS 파운데이션 구현까지 마친 시점에 개발 환경에 Mac/Xcode가
+        없어 실제 컴파일 검증이 불가능하다는 제약이 드러났고, "검증 가능한 것부터 완성도를 높인다"는 원칙에
+        따라 iOS는 보류하고 Android(Kotlin/Compose)와 Web(React)을 우선 진행하는 방향으로 전환. 이 판단
+        덕분에 이후 모든 기능을 실제 에뮬레이터·브라우저·로컬 백엔드로 끝까지 검증.
+      </p>
+    </div>
+
+    <div class="feature-grid">
+      <div class="feature-cell"><h4>로그인</h4><p>Naver/Google 소셜 로그인 + 이메일·비밀번호 로그인/회원가입</p></div>
+      <div class="feature-cell"><h4>다이브 로그</h4><p>프리다이빙/스쿠버 기록, 총 횟수·최대 수심 통계</p></div>
+      <div class="feature-cell"><h4>CO₂ Table</h4><p>프리다이빙 훈련용 세트 타이머</p></div>
+      <div class="feature-cell"><h4>자격증 관리</h4><p>AIDA/PADI/SSI 등 다이빙 자격증 등록·관리</p></div>
+      <div class="feature-cell"><h4>커뮤니티 · 정보 게시판</h4><p>게시글·댓글, 다이빙 관련 소식</p></div>
+      <div class="feature-cell"><h4>관리자 대시보드</h4><p>회원 관리, 정보글/배너 CRUD, 서비스 통계</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="architecture">
+  <div class="wrap">
+    <div class="kicker">Architecture</div>
+    <h2>계층형 아키텍처로 3개 플랫폼이 하나의 백엔드를 공유</h2>
+    <p class="lead">
+      Backend는 Router → Service → Repository로 관심사를 분리했고, Android/Web은 각자 View → ViewModel →
+      Repository → Service → API Client 계층으로 동일한 REST API를 소비한다.
+    </p>
+
+    <div class="arch-flow">
+      <div class="arch-box"><div class="t">Router</div><div class="d">엔드포인트 정의, 요청 검증</div></div>
+      <div class="arch-arrow">→</div>
+      <div class="arch-box"><div class="t">Service</div><div class="d">비즈니스 로직</div></div>
+      <div class="arch-arrow">→</div>
+      <div class="arch-box"><div class="t">Repository</div><div class="d">쿼리, ORM 매핑</div></div>
+      <div class="arch-arrow">→</div>
+      <div class="arch-box"><div class="t">PostgreSQL</div><div class="d">14 tables</div></div>
+    </div>
+
+    <div class="client-row">
+      <div class="arch-box"><div class="t">Android</div><div class="d">Kotlin · Jetpack Compose · Retrofit</div></div>
+      <div class="arch-box"><div class="t">Web</div><div class="d">React 19 · TypeScript · axios</div></div>
+      <div class="arch-box" style="border-color:var(--accent);"><div class="t" style="color:var(--accent);">FastAPI Backend</div><div class="d">위 4단계 공유</div></div>
+    </div>
+
+    <div class="stack-wrap">
+      <table class="stack">
+        <thead><tr><th></th><th>Backend</th><th>Android</th><th>Web</th></tr></thead>
+        <tbody>
+          <tr><td>언어/프레임워크</td><td>Python · FastAPI</td><td>Kotlin · Jetpack Compose</td><td>React 19 · TypeScript · Vite</td></tr>
+          <tr><td>데이터</td><td>SQLAlchemy 2.0(async) · Alembic · PostgreSQL 16.4</td><td>Retrofit · OkHttp · kotlinx.serialization</td><td>axios · react-router-dom</td></tr>
+          <tr><td>인증 저장</td><td>JWT(access/refresh)</td><td>EncryptedSharedPreferences</td><td>localStorage</td></tr>
+          <tr><td>소셜 로그인</td><td>Naver/Google 토큰 검증</td><td>NidOAuth · Credential Manager</td><td>Naver Login JS SDK · Google Identity Services</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section id="debugging">
+  <div class="wrap">
+    <div class="kicker">Problem solving</div>
+    <h2>구현보다 오래 걸린 건, "진짜로 동작하는지" 확인하는 과정</h2>
+    <p class="lead">
+      아래 7건은 전부 오프라인·목(mock) 기반 테스트로는 원천적으로 발견할 수 없고, 실제 DB·실제 기기·실제
+      계정으로 전체 플로우를 끝까지 돌려봐야만 드러난 문제.
+    </p>
+
+    <div class="log-session">
+      <div class="log-session-head">
+        <span class="tag">SESSION A</span>
+        <h3>로컬 PostgreSQL + 실제 백엔드 연동</h3>
+      </div>
+      <p class="log-session-sub">오프라인 SQL 생성과 목 기반 스모크 테스트만 하던 단계에서, 처음으로 진짜 DB에 마이그레이션을 실행하고 실제 기기를 백엔드에 붙였다.</p>
+
+      <div class="log-entry">
+        <h4>Alembic 마이그레이션의 Enum 타입 중복 생성</h4>
+        <div class="row"><div class="k">증상</div><div class="v"><code>DuplicateObjectError</code> — 마이그레이션 실행 즉시 실패</div></div>
+        <div class="row"><div class="k">원인</div><div class="v">Enum 타입을 <code>create_table()</code> 이전에 미리 생성했는데, <code>create_table()</code>이 컬럼용으로 같은 타입을 자동으로 또 생성 시도. 오프라인 SQL 생성(<code>--sql</code>)은 실제 실행이 없어 이 문제가 드러나지 않았음</div></div>
+        <div class="row"><div class="k">해결</div><div class="v">불필요한 사전 생성 로직 제거</div></div>
+      </div>
+
+      <div class="log-entry">
+        <h4>Timezone-naive datetime 컬럼</h4>
+        <div class="row"><div class="k">증상</div><div class="v">배너 목록 조회 API에서 500 에러</div></div>
+        <div class="row"><div class="k">원인</div><div class="v">5개 모델의 날짜 컬럼이 <code>DateTime(timezone=True)</code> 명시 없이 선언되어, timezone-aware 값과 비교하는 쿼리에서 타입 불일치. 마이그레이션 DDL 자체는 처음부터 <code>TIMESTAMPTZ</code>로 올바르게 정의되어 있었고 ORM 모델 코드만 어긋나 있었음</div></div>
+        <div class="row"><div class="k">해결</div><div class="v">5개 모델 파일에 <code>timezone=True</code> 추가, DB 재생성 불필요</div></div>
+      </div>
+
+      <div class="log-entry">
+        <h4>Android 9+ 평문 HTTP 통신 차단</h4>
+        <div class="row"><div class="k">증상</div><div class="v">에뮬레이터의 모든 API 요청이 조용히 실패</div></div>
+        <div class="row"><div class="k">원인</div><div class="v">Network Security Config 부재로 <code>CLEARTEXT communication not permitted</code></div></div>
+        <div class="row"><div class="k">해결</div><div class="v">디버그 빌드 전용 Network Security Config 추가 (릴리즈 빌드는 HTTPS라 영향 없음)</div></div>
+      </div>
+    </div>
+
+    <div class="log-session">
+      <div class="log-session-head">
+        <span class="tag">SESSION B</span>
+        <h3>실제 Naver·Google 계정으로 로그인 완주</h3>
+      </div>
+      <p class="log-session-sub">실제 OAuth 앱을 등록하고, 처음으로 진짜 계정으로 소셜 로그인을 끝까지 시도했다.</p>
+
+      <div class="log-entry">
+        <h4>Naver 로그인 콜백 페이지의 <code>.init()</code> 누락</h4>
+        <div class="row"><div class="k">증상</div><div class="v">실제 로그인에 성공해도 항상 "로그인이 완료되지 않았습니다"</div></div>
+        <div class="row"><div class="k">원인</div><div class="v">콜백 페이지가 SDK 인스턴스를 생성만 하고 <code>.init()</code>을 호출하지 않아, SDK가 URL의 OAuth 응답을 절대 파싱하지 못함. 실제 SDK 소스를 직접 읽어 <code>init()</code> 내부의 <code>callbackHandler → oauthCallback() → accessToken</code> 흐름을 확인해 원인 특정</div></div>
+        <div class="row"><div class="k">해결</div><div class="v"><code>.init()</code> 호출과 필수 DOM 컨테이너 추가</div></div>
+      </div>
+
+      <div class="log-entry">
+        <h4>서로 다른 Google OAuth Client ID</h4>
+        <div class="row"><div class="k">증상</div><div class="v">구글 로그인 시도 시 항상 401 (로그인 만료 메시지)</div></div>
+        <div class="row"><div class="k">원인</div><div class="v">Backend·Web 환경변수 파일에 실수로 서로 다른 Client ID가 채워져 있어 ID 토큰의 <code>aud</code> 클레임이 백엔드 기대값과 불일치</div></div>
+        <div class="row"><div class="k">해결</div><div class="v">두 값을 하나로 통일</div></div>
+      </div>
+
+      <div class="shot-pair">
+        <div class="frame">
+          <div class="frame-bar"><span></span><span></span><span></span></div>
+          <div class="frame-shot"><img src="data:image/png;base64,__IMG_NAVER__" alt="실제 네이버 로그인 화면에 DiveApp 앱 이름이 표시됨" loading="lazy"/></div>
+          <div class="frame-cap">수정 후 — 실제 Naver 계정으로 완주</div>
+        </div>
+        <div class="frame">
+          <div class="frame-bar"><span></span><span></span><span></span></div>
+          <div class="frame-shot"><img src="data:image/png;base64,__IMG_GOOGLE__" alt="실제 구글 로그인 화면에 DiveApp으로 이동한다는 문구 표시" loading="lazy"/></div>
+          <div class="frame-cap">수정 후 — 실제 Google 계정으로 완주</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="log-session">
+      <div class="log-session-head">
+        <span class="tag">SESSION C</span>
+        <h3>이메일/비밀번호 인증 추가</h3>
+      </div>
+      <p class="log-session-sub">회원가입 → 프로필 설정 → 홈 → 로그아웃 → 재로그인까지, 처음으로 전체 사이클을 실제 브라우저에서 클릭해보다가 발견 — 둘 다 원래 소셜 로그인에도 있던 기존 버그였다.</p>
+
+      <div class="log-entry">
+        <h4>프로필 설정 화면에 라우트 가드 없음</h4>
+        <div class="row"><div class="k">증상</div><div class="v">저장에 성공해도 계속 같은 화면에 머무름</div></div>
+        <div class="row"><div class="k">원인</div><div class="v">저장 API 성공 후 다른 화면으로 이동시키는 로직 자체가 없었음</div></div>
+        <div class="row"><div class="k">해결</div><div class="v"><code>authenticated</code> 상태가 되면 자동으로 홈으로 이동하는 라우트 가드 추가</div></div>
+      </div>
+
+      <div class="log-entry">
+        <h4>로그인 화면이 "프로필 설정 필요" 상태 미처리</h4>
+        <div class="row"><div class="k">증상</div><div class="v">신규가입 직후에도 로그인 화면에 그대로 남아있음</div></div>
+        <div class="row"><div class="k">원인</div><div class="v">로그인 화면의 라우트 가드가 <code>authenticated</code> 상태만 확인하고 <code>needsProfileSetup</code>은 처리하지 않았음</div></div>
+        <div class="row"><div class="k">해결</div><div class="v">해당 상태일 때 프로필 설정 화면으로 이동하는 조건 추가</div></div>
+      </div>
+
+      <div class="shot-pair">
+        <div class="frame">
+          <div class="frame-bar"><span></span><span></span><span></span></div>
+          <div class="frame-shot"><img src="data:image/png;base64,__IMG_DIVELOG__" alt="실제 백엔드에서 불러온 다이브 로그 목록, 프리다이빙 1회 최대 수심 18.5m" loading="lazy"/></div>
+          <div class="frame-cap">Web — 실제 등록된 다이빙 기록</div>
+        </div>
+        <div class="frame">
+          <div class="frame-bar"><span></span><span></span><span></span></div>
+          <div class="frame-shot"><img src="data:image/png;base64,__IMG_MOBILE__" alt="Android CO2 Table 훈련 타이머가 실제로 카운트다운되는 화면" loading="lazy"/></div>
+          <div class="frame-cap">Android — CO₂ Table 타이머 실시간 동작</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="admin">
+  <div class="wrap">
+    <div class="kicker">Admin</div>
+    <h2>관리자 대시보드까지 실제 데이터로 검증</h2>
+    <p class="lead">
+      회원 관리, 정보글/배너 CRUD, 서비스 통계를 제공하는 관리자 화면을 별도 앱 없이 기존 Web 서비스 안에
+      역할 기반으로 통합했고, 실제 계정을 관리자 권한으로 전환해 통계 조회부터 CRUD, 배너 노출 순서 중복
+      검증 로직까지 실제 백엔드로 확인.
+    </p>
+    <div class="frame">
+      <div class="frame-bar"><span></span><span></span><span></span></div>
+      <div class="frame-shot"><img src="data:image/png;base64,__IMG_ADMIN__" alt="관리자 대시보드 — 총 회원, 신규가입, 게시글, 다이브 로그 등 실제 통계" loading="lazy"/></div>
+      <div class="frame-cap">Admin 대시보드 — 실제 DB 값 기준 통계</div>
+    </div>
+  </div>
+</section>
+
+<section id="retro">
+  <div class="wrap">
+    <div class="kicker">Retrospective</div>
+    <h2>회고</h2>
+    <p class="retro-quote">
+      일곱 건의 버그 모두 공통점 —<br/>
+      <span>오프라인·목 기반 테스트로는 원천적으로 발견할 수 없고,</span><br/>
+      실제 환경에서 끝까지 돌려봐야만 드러나는 문제였다는 점.
+    </p>
+    <p class="lead" style="margin-top:22px;">
+      "구현했다"는 것과 "실제로 동작한다"는 것 사이의 간극을 좁히는 데 개발 과정의 상당 부분을 썼고, 이
+      프로젝트를 통해 로컬 개발 환경에서도 가능한 한 실제 인프라(진짜 DB, 진짜 OAuth 앱, 진짜 기기)를 갖추고
+      검증하는 습관의 가치를 다시 확인.
+    </p>
+  </div>
+</section>
+
+<footer class="wrap">
+  <div class="foot-row">
+    <div class="badges">
+      <span class="badge">FastAPI</span>
+      <span class="badge">PostgreSQL</span>
+      <span class="badge">Kotlin / Compose</span>
+      <span class="badge">React / TypeScript</span>
+    </div>
+    <div class="foot-note">DiveApp — Personal Project Case Study</div>
+  </div>
+</footer>

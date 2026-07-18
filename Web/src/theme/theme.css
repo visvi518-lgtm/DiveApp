@@ -1,0 +1,79 @@
+/* Semantic color roles from Docs/08_DesignSystem.md. Real brand colors are
+   not yet defined ("실제 색상값은 추후 정의한다") — these are neutral
+   placeholders until a palette is chosen. Mirrors Android's Color.kt / iOS's
+   AppColor.swift for consistency across platforms. */
+:root {
+  --color-primary: #0a6e8c;
+  --color-secondary: #5c6b73;
+  --color-background: #ffffff;
+  --color-surface: #f2f5f6;
+  --color-error: #b3261e;
+  --color-warning: #f9a825;
+  --color-success: #2e7d32;
+  --color-information: #1565c0;
+  --color-on-background: #16202400;
+  --color-text: #16191c;
+  --color-text-secondary: #5c6b73;
+  --color-border: #d8dee1;
+
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 12px;
+  --space-lg: 16px;
+  --space-xl: 24px;
+  --space-xxl: 32px;
+
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 20px;
+
+  color-scheme: light dark;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-primary: #4fc3e0;
+    --color-background: #101416;
+    --color-surface: #1b2124;
+    --color-text: #f2f5f6;
+    --color-text-secondary: #a8b3b8;
+    --color-border: #333c40;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family:
+    -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Noto Sans KR', sans-serif;
+  background: var(--color-background);
+  color: var(--color-text);
+}
+
+a {
+  color: inherit;
+}
+
+button,
+input,
+textarea,
+select {
+  font-family: inherit;
+  font-size: 1rem;
+}
+
+h1,
+h2,
+h3,
+p {
+  margin: 0;
+}

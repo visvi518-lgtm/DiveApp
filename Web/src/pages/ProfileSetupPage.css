@@ -1,0 +1,26 @@
+.profile-setup-page {
+  max-width: 420px;
+  margin: 0 auto;
+  padding: var(--space-xxl) var(--space-xl);
+}
+
+.profile-setup-page__hint {
+  color: var(--color-text-secondary);
+  margin-top: var(--space-xs);
+  margin-bottom: var(--space-lg);
+}
+
+.profile-setup-page__input {
+  width: 100%;
+  padding: var(--space-md);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-background);
+  color: var(--color-text);
+}
+
+.profile-setup-page__error {
+  color: var(--color-error);
+  font-size: 0.875rem;
+  margin-top: var(--space-sm);
+}

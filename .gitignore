@@ -1,0 +1,30 @@
+# Environment
+.env
+.env.local
+
+# Python
+Backend/__pycache__/
+Backend/**/__pycache__/
+Backend/*.egg-info/
+Backend/.venv/
+Backend/venv/
+Backend/.pytest_cache/
+
+# Xcode
+Frontend/**/xcuserdata/
+Frontend/**/*.xcuserstate
+Frontend/build/
+Frontend/DerivedData/
+
+# Android
+Android/local.properties
+Android/.gradle/
+Android/**/build/
+Android/.idea/
+Android/**/*.iml
+Android/captures/
+Android/.cxx/
+
+# OS
+.DS_Store
+Thumbs.db
