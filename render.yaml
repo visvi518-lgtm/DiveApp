@@ -57,6 +57,10 @@ services:
         sync: false
       - key: VITE_NAVER_CLIENT_ID
         sync: false
+      # NAVER Cloud Platform Maps 애플리케이션의 Key ID (다이빙 로그 위치 선택 지도용).
+      # 허용 웹 서비스 URL에 이 서비스의 배포 도메인을 등록해야 함 (Docs/13).
+      - key: VITE_NAVER_MAP_NCP_KEY_ID
+        sync: false
     routes:
       - type: rewrite
         source: /*
