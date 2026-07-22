@@ -33,7 +33,9 @@
 - [x] `VITE_NAVER_CLIENT_ID`
 - [ ] `VITE_NAVER_CALLBACK_URL` — 선택, 비워두면 자동으로 `현재 origin + /auth/naver/callback` 사용 (로컬은 그대로 비워둬도 됨)
 - [ ] `VITE_API_BASE_URL` — 선택, 비워두면 `http://localhost:8000`
-- [ ] `VITE_NAVER_MAP_NCP_KEY_ID` — NAVER Cloud Platform Maps에서 발급받은 NCP Key ID (다이빙 로그 위치 선택 지도용). 채우기 전까지는 위치 선택 화면 진입 시 인증 실패 에러가 표시됨 (`Docs/13_DiveLogWeb.md`)
+- [x] `VITE_NAVER_MAP_NCP_KEY_ID` — NAVER Cloud Platform Maps에서 발급받은 NCP Key ID (다이빙 로그 위치 선택 지도용), 로컬 `.env`에 채워짐 (2026-07-22)
+  - [ ] **프로덕션에는 별도로 필요**: `render.yaml`의 `diveapp-web` 서비스에 `sync: false`로 선언만 해둠 — 로컬 `.env`는 gitignore되어 배포에 반영되지 않으므로, Render 대시보드의 diveapp-web → Environment에서 이 키를 직접 채워야 함
+  - [ ] NCP 콘솔의 허용 웹 서비스 URL에 `https://diveapp-web.onrender.com` 등록 필요
 
 ### Android/local.properties (아직 비어있음 — 확인 결과 sdk.dir만 있고 아래 값들은 안 채워짐, 2026-07-18)
 
