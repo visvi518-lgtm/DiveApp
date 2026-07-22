@@ -24,6 +24,7 @@ Android/.idea/
 Android/**/*.iml
 Android/captures/
 Android/.cxx/
+Android/.kotlin/
 
 # User's personal iPad Swift Playground sync files — not part of this project
 DiveAppSwiftPlayground/

@@ -1,7 +1,8 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { diveLogService } from '../../services/diveLogService';
 import type { DiveType } from '../../models/enums';
+import type { PickedDiveLocation } from '../../models/diveLogModels';
 import { Button } from '../../components/Button';
 import { SubPageHeader } from '../../components/SubPageHeader';
 
@@ -11,6 +12,7 @@ function today(): string {
 
 export function DiveLogCreatePage() {
   const navigate = useNavigate();
+  const routerLocation = useLocation();
 
   const [diveType, setDiveType] = useState<DiveType>('FREEDIVING');
   const [diveDate, setDiveDate] = useState(today());
@@ -19,6 +21,16 @@ export function DiveLogCreatePage() {
   const [latitude, setLatitude] = useState('');
   const [longitude, setLongitude] = useState('');
   const [memo, setMemo] = useState('');
+
+  useEffect(() => {
+    const pickedLocation = (routerLocation.state as { pickedLocation?: PickedDiveLocation } | null)?.pickedLocation;
+    if (!pickedLocation) return;
+    setLocationName(pickedLocation.siteName);
+    setLatitude(String(pickedLocation.latitude));
+    setLongitude(String(pickedLocation.longitude));
+    navigate('.', { replace: true, state: null });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [routerLocation.state]);
 
   const [maxDepth, setMaxDepth] = useState('');
   const [diveTimeSeconds, setDiveTimeSeconds] = useState('');
@@ -52,6 +64,10 @@ export function DiveLogCreatePage() {
           longitude: Number(longitude),
           city: city || null,
         },
+        // Exact coordinate selected for this individual log — sent alongside
+        // the reusable location's coordinate (Docs/13 data contract).
+        latitude: Number(latitude),
+        longitude: Number(longitude),
         memo: memo || null,
         freediving:
           diveType === 'FREEDIVING' ? { max_depth: Number(maxDepth), dive_time_seconds: Number(diveTimeSeconds) } : null,
@@ -95,16 +111,26 @@ export function DiveLogCreatePage() {
         <input value={locationName} onChange={(event) => setLocationName(event.target.value)} />
       </label>
 
-      <div className="form-row">
-        <label className="form-field">
-          위도
-          <input value={latitude} onChange={(event) => setLatitude(event.target.value)} inputMode="decimal" />
-        </label>
-        <label className="form-field">
-          경도
-          <input value={longitude} onChange={(event) => setLongitude(event.target.value)} inputMode="decimal" />
-        </label>
-      </div>
+      <Button
+        variant="secondary"
+        onClick={() =>
+          navigate('/dive-logs/new/location', {
+            state: {
+              initialSiteName: locationName,
+              initialLatitude: latitude !== '' ? Number(latitude) : undefined,
+              initialLongitude: longitude !== '' ? Number(longitude) : undefined,
+            },
+          })
+        }
+        style={{ width: 'auto', marginBottom: 'var(--space-md)' }}
+      >
+        지도에서 위치 선택
+      </Button>
+      {latitude !== '' && longitude !== '' && (
+        <p style={{ fontSize: '0.875rem', color: 'var(--color-text-secondary)', marginBottom: 'var(--space-md)' }}>
+          선택된 위치: 위도 {latitude}, 경도 {longitude}
+        </p>
+      )}
 
       <label className="form-field">
         도시 (선택)

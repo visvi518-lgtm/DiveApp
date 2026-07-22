@@ -11,6 +11,7 @@ import { InformationListPage } from './pages/information/InformationListPage';
 import { InformationDetailPage } from './pages/information/InformationDetailPage';
 import { DiveLogListPage } from './pages/divelog/DiveLogListPage';
 import { DiveLogCreatePage } from './pages/divelog/DiveLogCreatePage';
+import { DiveLogLocationPickerPage } from './pages/divelog/DiveLogLocationPickerPage';
 import { DiveLogDetailPage } from './pages/divelog/DiveLogDetailPage';
 import { DiveLogEditPage } from './pages/divelog/DiveLogEditPage';
 import { TrainingPage } from './pages/training/TrainingPage';
@@ -98,6 +99,7 @@ function AppRoutes() {
 
         <Route path="dive-logs" element={<DiveLogListPage />} />
         <Route path="dive-logs/new" element={<DiveLogCreatePage />} />
+        <Route path="dive-logs/new/location" element={<DiveLogLocationPickerPage />} />
         <Route path="dive-logs/:id" element={<DiveLogDetailPage />} />
         <Route path="dive-logs/:id/edit" element={<DiveLogEditPage />} />
 

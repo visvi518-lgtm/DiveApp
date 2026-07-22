@@ -35,17 +35,36 @@ import com.diveapp.android.model.DiveType
 import com.diveapp.android.repository.DiveLogRepository
 import com.diveapp.android.ui.ViewModelFactory
 import com.diveapp.android.ui.components.PrimaryButton
+import com.diveapp.android.ui.components.SecondaryButton
 import com.diveapp.android.ui.theme.AppSpacing
 import java.time.Instant
 import java.time.ZoneOffset
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DiveLogCreateScreen(repository: DiveLogRepository, onSaved: () -> Unit, onBack: () -> Unit) {
+fun DiveLogCreateScreen(
+    repository: DiveLogRepository,
+    pickedSiteName: String?,
+    pickedLatitude: String?,
+    pickedLongitude: String?,
+    onPickedLocationConsumed: () -> Unit,
+    onPickLocationClick: (siteName: String, latitude: String, longitude: String) -> Unit,
+    onSaved: () -> Unit,
+    onBack: () -> Unit,
+) {
     val viewModel: DiveLogCreateViewModel = viewModel(factory = ViewModelFactory { DiveLogCreateViewModel(repository) })
 
     LaunchedEffect(viewModel.saveCompleted) {
         if (viewModel.saveCompleted) onSaved()
+    }
+
+    LaunchedEffect(pickedSiteName, pickedLatitude, pickedLongitude) {
+        if (pickedSiteName != null && pickedLatitude != null && pickedLongitude != null) {
+            viewModel.locationName = pickedSiteName
+            viewModel.latitude = pickedLatitude
+            viewModel.longitude = pickedLongitude
+            onPickedLocationConsumed()
+        }
     }
 
     Scaffold(
@@ -104,20 +123,17 @@ fun DiveLogCreateScreen(repository: DiveLogRepository, onSaved: () -> Unit, onBa
                 label = { Text("다이빙 장소") },
                 modifier = Modifier.fillMaxWidth().padding(top = AppSpacing.md),
             )
-            Row(modifier = Modifier.padding(top = AppSpacing.md)) {
-                OutlinedTextField(
-                    value = viewModel.latitude,
-                    onValueChange = { viewModel.latitude = it },
-                    label = { Text("위도") },
-                    keyboardOptions = androidx.compose.foundation.text.KeyboardOptions(keyboardType = KeyboardType.Decimal),
-                    modifier = Modifier.weight(1f),
-                )
-                OutlinedTextField(
-                    value = viewModel.longitude,
-                    onValueChange = { viewModel.longitude = it },
-                    label = { Text("경도") },
-                    keyboardOptions = androidx.compose.foundation.text.KeyboardOptions(keyboardType = KeyboardType.Decimal),
-                    modifier = Modifier.weight(1f).padding(start = AppSpacing.md),
+            SecondaryButton(
+                text = "지도에서 위치 선택",
+                onClick = { onPickLocationClick(viewModel.locationName, viewModel.latitude, viewModel.longitude) },
+                modifier = Modifier.padding(top = AppSpacing.md),
+            )
+            if (viewModel.latitude.isNotBlank() && viewModel.longitude.isNotBlank()) {
+                Text(
+                    "선택된 위치: 위도 ${viewModel.latitude}, 경도 ${viewModel.longitude}",
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.padding(top = AppSpacing.xs),
                 )
             }
             OutlinedTextField(

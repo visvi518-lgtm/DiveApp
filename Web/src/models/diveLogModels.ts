@@ -42,6 +42,11 @@ export interface DiveLogCreateRequest {
   dive_type: DiveType;
   dive_date: string;
   location: DiveLocationInput;
+  // Exact coordinate selected for this individual log — kept separate from
+  // `location`'s coordinate since the reusable DiveLocation row can be shared
+  // (and later re-pointed) across dive logs with a similar name/city/country.
+  latitude?: number | null;
+  longitude?: number | null;
   memo?: string | null;
   freediving?: FreedivingDetailInput | null;
   scuba?: ScubaDetailInput | null;
@@ -58,11 +63,21 @@ export interface DiveLogResponse {
   dive_type: DiveType;
   dive_date: string;
   location: DiveLocationResponse;
+  latitude: number | null;
+  longitude: number | null;
   memo: string | null;
   freediving: FreedivingDetailInput | null;
   scuba: ScubaDetailInput | null;
   photos: DivePhotoResponse[];
   created_at: string;
+}
+
+/** A point chosen in the map picker (Docs/13), before it's attached to a
+ * create/update request. UI-only — not sent to the API as-is. */
+export interface PickedDiveLocation {
+  siteName: string;
+  latitude: number;
+  longitude: number;
 }
 
 export interface DiveLogListItem {

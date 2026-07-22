@@ -30,6 +30,10 @@ android {
         buildConfigField("String", "NAVER_CLIENT_SECRET", "\"${localProperties.getProperty("NAVER_CLIENT_SECRET", "")}\"")
         buildConfigField("String", "NAVER_CLIENT_NAME", "\"${localProperties.getProperty("NAVER_CLIENT_NAME", "DiveApp")}\"")
         buildConfigField("String", "GOOGLE_WEB_CLIENT_ID", "\"${localProperties.getProperty("GOOGLE_WEB_CLIENT_ID", "")}\"")
+
+        // AndroidManifest.xml cannot read BuildConfig, so the NAVER Maps key
+        // is injected as a manifest placeholder instead of a buildConfigField.
+        manifestPlaceholders["NAVER_MAP_CLIENT_ID"] = localProperties.getProperty("NAVER_MAP_CLIENT_ID", "")
     }
 
     buildTypes {
@@ -91,6 +95,10 @@ dependencies {
     implementation("androidx.credentials:credentials:1.6.0")
     implementation("androidx.credentials:credentials-play-services-auth:1.6.0")
     implementation("com.google.android.libraries.identity.googleid:googleid:1.2.0")
+
+    // NAVER Maps Android SDK — dive log location picker (map + marker only,
+    // no place search/reverse geocoding in the SDK per Docs/12).
+    implementation("com.naver.maps:map-sdk:3.23.3")
 
     debugImplementation("androidx.compose.ui:ui-tooling")
 }

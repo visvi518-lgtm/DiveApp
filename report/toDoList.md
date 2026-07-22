@@ -12,6 +12,11 @@
   - [x] 애플리케이션 등록, Client ID/Secret 발급
   - [x] PC 웹 플랫폼 등록 → 콜백 URL `http://localhost:5173/auth/naver/callback`
   - [x] Android 플랫폼 등록 → 패키지명 `com.diveapp.android`
+- [ ] **NAVER Cloud Platform (Maps)** — 다이빙 로그 위치 선택 지도용, 위 Naver Developers 로그인 키와는 별개
+  - [ ] NCP 콘솔에서 Maps 애플리케이션 생성, Dynamic Map 활성화
+  - [ ] Android 패키지명 `com.diveapp.android` 등록
+  - [ ] 허용 웹 서비스 URL에 로컬 개발 주소(`http://localhost:5173`)와 배포 도메인(`https://diveapp-web.onrender.com`) 등록
+  - [ ] NCP Key ID 발급 → Android는 `Android/local.properties`의 `NAVER_MAP_CLIENT_ID`, Web은 `Web/.env`의 `VITE_NAVER_MAP_NCP_KEY_ID`에 채워넣기 (같은 NCP 애플리케이션에 Android/Web 플랫폼을 함께 등록하면 하나의 Key ID를 공유할 수 있는지는 NCP 콘솔에서 직접 확인 필요)
 
 ### Backend/.env
 
@@ -28,6 +33,7 @@
 - [x] `VITE_NAVER_CLIENT_ID`
 - [ ] `VITE_NAVER_CALLBACK_URL` — 선택, 비워두면 자동으로 `현재 origin + /auth/naver/callback` 사용 (로컬은 그대로 비워둬도 됨)
 - [ ] `VITE_API_BASE_URL` — 선택, 비워두면 `http://localhost:8000`
+- [ ] `VITE_NAVER_MAP_NCP_KEY_ID` — NAVER Cloud Platform Maps에서 발급받은 NCP Key ID (다이빙 로그 위치 선택 지도용). 채우기 전까지는 위치 선택 화면 진입 시 인증 실패 에러가 표시됨 (`Docs/13_DiveLogWeb.md`)
 
 ### Android/local.properties (아직 비어있음 — 확인 결과 sdk.dir만 있고 아래 값들은 안 채워짐, 2026-07-18)
 
@@ -35,6 +41,7 @@
 - [ ] `NAVER_CLIENT_SECRET`
 - [ ] `NAVER_CLIENT_NAME` — 네이버 로그인 화면에 표시될 앱 이름 (기본값 "DiveApp")
 - [ ] `GOOGLE_WEB_CLIENT_ID` — Web과 동일한 값이어야 함 (2026-07-18 기준 정답: `604875817827-vq6k3qaiu45qdipidsvq3lh1tl5badbg.apps.googleusercontent.com`)
+- [ ] `NAVER_MAP_CLIENT_ID` — NAVER Cloud Platform Maps에서 발급받은 NCP Key ID (다이빙 로그 위치 선택 지도용, `NAVER_CLIENT_ID`와는 다른 키). 채우기 전까지는 지도 화면 진입 시 인증 실패 에러가 표시됨 (`Docs/12_DiveLogLocation_NaverMap.md`)
 
 **Web은 재시작 완료, 실제 Naver/Google 로그인 화면까지 도달하는 것 확인함** (2026-07-18) — 단 Google은 Backend/.env와 Web/.env의 `GOOGLE_CLIENT_ID`가 서로 다른 값으로 잘못 채워져 있었던 걸 발견해 Backend 쪽을 Web과 동일하게 수정함. Android는 위 값들을 채우고 Gradle 동기화 후 에뮬레이터/실기기에서 별도 확인 필요.
 
@@ -74,7 +81,8 @@
 
 - [ ] 실제 브랜드 컬러/타이포그래피 확정 (지금은 임시 색상)
 - [ ] 이미지 업로드용 스토리지(S3 등) 연동 — 현재는 URL만 저장 가능
-- [ ] Naver Map API 키 발급 및 다이빙 위치 지도 연동 (현재 위도/경도 수동 입력)
+- [x] Android 다이빙 위치 지도 연동 UI 구현 완료 (`Docs/12_DiveLogLocation_NaverMap.md`, 2026-07-22) — 실제 NCP Key ID 발급/입력 및 기기 테스트는 미완료
+- [x] Web 다이빙 위치 지도 연동 UI 구현 완료 (`Docs/13_DiveLogWeb.md`, 2026-07-22) — 실제 NCP Key ID 발급/입력 및 브라우저 테스트는 미완료
 - [ ] 문서 불일치 항목 결정 — `Requirements.md` vs `DatabaseSchema.md` 필드 차이, 스키마 확장 여부
 - [ ] iOS 재개 여부 결정 (현재 보류 중)
 

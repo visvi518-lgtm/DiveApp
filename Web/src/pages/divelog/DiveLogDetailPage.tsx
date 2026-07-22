@@ -44,6 +44,19 @@ export function DiveLogDetailPage() {
           <p style={{ color: 'var(--color-text-secondary)' }}>
             {state.log.dive_date} · {state.log.location.name}
           </p>
+          {(() => {
+            // This individual log's exact selected coordinate takes priority
+            // over the reusable DiveLocation's coordinate, which can be
+            // shared/re-pointed across logs with a similar name/city/country
+            // (Docs/13 location reuse safety).
+            const latitude = state.log.latitude ?? state.log.location.latitude;
+            const longitude = state.log.longitude ?? state.log.location.longitude;
+            return (
+              <p style={{ color: 'var(--color-text-secondary)', fontSize: '0.875rem' }}>
+                위도 {latitude.toFixed(7)}, 경도 {longitude.toFixed(7)}
+              </p>
+            );
+          })()}
 
           {state.log.freediving && (
             <>
